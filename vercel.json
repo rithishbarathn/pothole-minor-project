@@ -1,7 +1,13 @@
-{
-  "version": 2,
-  "installCommand": "cd frontend && npm install",
-  "buildCommand": "cd frontend && npm run build",
-  "outputDirectory": "frontend/dist",
-  "framework": "vite"
-}
+    {
+      "experimentalServices": {
+        "frontend": {
+          "entrypoint": "frontend",
+          "routePrefix": "/",
+          "framework": "vite"
+        },
+        "backend": {
+          "entrypoint": "backend",
+          "routePrefix": "/_/backend"
+        }
+      }
+    }
