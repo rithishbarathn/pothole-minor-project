@@ -6,9 +6,9 @@
           "framework": "vite"
         },
         "backend": {
-          "entrypoint": "backend",
-          "routePrefix": "/_/backend",
-          "framework": "other"
+          "entrypoint": "backend/Dockerfile",
+          "routePrefix": "/_/backend"
+        }
         }
       }
     }
