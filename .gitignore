@@ -22,7 +22,6 @@ venv/
 .coverage*
 
 # Backend model/artifacts
-backend/*.pt
 backend/runs/
 
 # Node / frontend
