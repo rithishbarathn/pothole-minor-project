@@ -8,7 +8,7 @@ function read(key: string, fallback: string): string {
 }
 
 export const APP_CONFIG = {
-  appTitle: read('VITE_APP_TITLE', 'Road Surface Distress Analysis Console'),
+  appTitle: read('VITE_APP_TITLE', 'AN AUTOMATED ROAD INFRASTRUCTURE ASSESSMENT MODEL USING DEEP LEARNING FOR POTHOLE DETCTION IN CITIES AND MULIT CLASS SEVERITY CLASSIFICATION'),
   appSubtitle: read(
     'VITE_APP_SUBTITLE',
     'Upload roadway imagery, execute pothole inference, and review structured severity outputs.',
