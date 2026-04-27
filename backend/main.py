@@ -1,3 +1,52 @@
+from fastapi.responses import JSONResponse
+
+def process_video_frames(video_path: str, predictor: YOLO) -> list[dict[str, any]]:
+    cap = cv2.VideoCapture(video_path)
+    detections_summary = []
+    frame_idx = 0
+    while cap.isOpened():
+        ret, frame = cap.read()
+        if not ret:
+            break
+        results = predictor.predict(frame, conf=0.25)
+        _, detections = annotate_frame(frame, results)
+        for det in detections:
+            detections_summary.append({
+                "frame": frame_idx,
+                **det
+            })
+        frame_idx += 1
+    cap.release()
+    return detections_summary
+
+@app.post("/predict-video")
+async def predict_video(file: UploadFile = File(...)) -> JSONResponse:
+    # Save uploaded video to a temp file
+    import tempfile
+    try:
+        suffix = os.path.splitext(file.filename)[-1]
+        with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
+            tmp.write(await file.read())
+            tmp_path = tmp.name
+    except Exception as exc:
+        raise HTTPException(status_code=400, detail="Invalid video file") from exc
+
+    try:
+        predictor = get_model()
+    except FileNotFoundError as exc:
+        raise HTTPException(status_code=503, detail=str(exc)) from exc
+
+    detections_summary = process_video_frames(tmp_path, predictor)
+
+    # Clean up temp file
+    os.remove(tmp_path)
+
+    return JSONResponse({
+        "filename": file.filename,
+        "total_frames": max([d["frame"] for d in detections_summary], default=-1) + 1,
+        "total_detections": len(detections_summary),
+        "detections": detections_summary
+    })
 import base64
 import io
 import os
